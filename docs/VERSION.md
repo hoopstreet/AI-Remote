@@ -1,2 +1,2 @@
-VERSION: 1.2.0-draft-engine
-STATUS: multi-agent-drafting-enabled
+VERSION: 1.3.0-coder-workflow
+STATUS: manual-approval-coding-ready

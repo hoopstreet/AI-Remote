@@ -66,3 +66,35 @@ bot.on('text', async (ctx) => {
 });
 
 bot.launch();
+
+// Approval Command: /approve [TASK_ID]
+bot.command('approve', async (ctx) => {
+    const taskId = ctx.message.text.split(' ')[1];
+    if (!taskId) return ctx.reply("❌ Please provide a Task ID: /approve ID");
+
+    ctx.reply(`⚙️ Approving Task ${taskId}... Preparing GitHub update...`);
+
+    try {
+        // 1. Fetch the draft from Supabase
+        const { data: draft, error } = await supabase.schema('AI-Remote-Table')
+            .from('drafts').select('*').eq('task_id', taskId).single();
+        
+        if (error || !draft) throw new Error("Draft not found.");
+
+        // 2. Signal GitHub (Update a specific 'status' file to trigger a push)
+        await octokit.repos.createOrUpdateFileContents({
+            owner: REPO_OWNER, repo: REPO_NAME,
+            path: 'docs/APPROVED_CHANGES.md',
+            message: `approved-task: ${taskId}`,
+            content: Buffer.from(`TASK: ${taskId}\nCODE:\n${draft.proposed_code}`).toString('base64')
+        });
+
+        // 3. Update Status in Supabase
+        await supabase.schema('AI-Remote-Table')
+            .from('drafts').update({ status: 'approved' }).eq('task_id', taskId);
+
+        ctx.reply("🚀 Approved! GitHub is now deploying the code changes.");
+    } catch (err) {
+        ctx.reply("❌ Approval Error: " + err.message);
+    }
+});
