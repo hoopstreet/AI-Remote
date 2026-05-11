@@ -1,7 +1,5 @@
-#!/bin/bash
-echo "--- SYSTEM STATUS ---"
-cat docs/VERSION.md
-echo "--- RECENT TASKS ---"
-tail -n 5 docs/Task.md
-echo "--- SOURCE MAP ---"
-cat docs/SOURCE_MAP.md
+#!/bin/sh
+echo "--- [ SYSTEM STATUS ] ---"
+[ -f docs/VERSION.md ] && cat docs/VERSION.md || echo "Version file missing"
+echo "--- [ LATEST TASK ] ---"
+[ -f docs/Task.md ] && tail -n 10 docs/Task.md || echo "No active tasks"
