@@ -1,2 +1,2 @@
-VERSION: 1.0.0-multi-agent
-STATUS: operational
+VERSION: 1.1.0-schema-integrated
+STATUS: operational-with-supabase-schema

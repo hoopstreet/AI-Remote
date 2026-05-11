@@ -4,6 +4,8 @@ const { createClient } = require('@supabase/supabase-js');
 const axios = require('axios');
 require('dotenv').config();
 
+// Clients - Initialized with specific schema access if needed, 
+// though .from('"AI-Remote-Table"'.tableName) is the standard JS approach.
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 const octokit = new Octokit({ auth: process.env.GH_TOKEN });
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
@@ -28,33 +30,41 @@ bot.on('text', async (ctx) => {
     const userInput = ctx.message.text;
     if (userInput.startsWith('/')) return;
 
-    ctx.reply("🕵️ Agents are debating your request...");
+    ctx.reply("🕵️ Agents are debating & logging to AI-Remote-Table...");
 
     try {
-        // Agent 1: The Architect (Plan)
+        // 1. Multi-Agent Debate
         const plan = await askAI(`Create a technical plan for: ${userInput}`, "Senior Architect");
-        
-        // Agent 2: The Security/DevOps Reviewer (Verify)
         const review = await askAI(`Review this plan for security and CI/CD risks: ${plan}`, "Security Lead");
 
-        // Merge results for the Final Task
-        const finalTask = `# TASK: ${userInput}\n\n## ARCHITECT PLAN\n${plan}\n\n## SECURITY REVIEW\n${review}`;
+        // 2. Insert into "AI-Remote-Table".tasks
+        const { data: taskData, error: taskError } = await supabase
+            .from('tasks')
+            .insert([{ 
+                description: userInput, 
+                suggestion: plan, 
+                status: 'reviewed' 
+            }])
+            .select()
+            .schema('AI-Remote-Table'); // Explicitly pointing to your custom schema
 
-        // Update GitHub
+        if (taskError) throw taskError;
+
+        // 3. Push to GitHub
+        const finalTask = `# TASK: ${userInput}\n\n## PLAN\n${plan}\n\n## REVIEW\n${review}`;
         await octokit.repos.createOrUpdateFileContents({
             owner: REPO_OWNER,
             repo: REPO_NAME,
             path: 'docs/Task.md',
-            message: `multi-agent-task: ${userInput.substring(0, 20)}`,
+            message: `remote-task: ${userInput.substring(0, 20)}`,
             content: Buffer.from(finalTask).toString('base64')
         });
 
-        // Store in Supabase
-        await supabase.from('tasks').insert([{ description: userInput, suggestion: plan, status: 'reviewed' }]);
+        ctx.reply(`✅ System Synced.\n- Schema: AI-Remote-Table\n- Table: tasks\n- GitHub: docs/Task.md`);
 
-        ctx.reply(`✅ Debate Complete. Task Pushed.\n\nSummary:\n${plan.substring(0, 300)}...`);
     } catch (err) {
-        ctx.reply("⚠️ Debate Failed: " + err.message);
+        ctx.reply("⚠️ Operational Error: " + err.message);
+        console.error(err);
     }
 });
 
