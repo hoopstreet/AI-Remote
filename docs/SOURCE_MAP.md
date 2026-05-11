@@ -1,5 +1,6 @@
 # SOURCE MAP
-- /docs: Documentation & Truth
-- /src: Bot & Logic
-- /scripts: iSH Local Runners
-- /.github/workflows: Cloud Automation
+- /docs: Documentation, VERSION.md, DNA.md
+- /src: Multi-Agent Logic (Northflank Engine)
+- /scripts: iSH Tools & GitHub Execution Scripts
+- /.github/workflows: Automation (Task Runner & Coder)
+- Database: AI-Remote-Table (Supabase)

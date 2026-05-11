@@ -1,2 +1,2 @@
-VERSION: 1.4.0-autonomous-execution
-STATUS: self-modifying-ready
+VERSION: 1.4.1
+STATUS: end-to-end-automation-active
