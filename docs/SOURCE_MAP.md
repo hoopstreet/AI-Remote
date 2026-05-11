@@ -1,5 +1,5 @@
-# System Source Map
-- /src/bot/telegramBot.js (Entry Point)
-- /docs (System Intelligence & Logs)
-- /scripts (Automation & Maintenance)
-- /supabase (Database Schemas)
+# SOURCE MAP
+- /docs: Documentation & Truth
+- /src: Bot & Logic
+- /scripts: iSH Local Runners
+- /.github/workflows: Cloud Automation
