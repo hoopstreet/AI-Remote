@@ -1,6 +1,6 @@
 const { generateTask } = require("./taskGenerator");
 const { getProject, setProject } = require("../memory/memory");
-const { pushFile } = require("../utils/gitHubClient");
+const { pushFile } = require("../utils/githubClient");
 const { addDraft, getDrafts, updateDraftStatus } = require("../drafts/draftManager");
 const { runAgents } = require("../agents/orchestrator");
 const { detectDependencies, getExecutionOrder, groupExecution } = require("../graph/graphBuilder");

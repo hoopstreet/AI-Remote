@@ -7,13 +7,28 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "telegraf": "^4.12.2",
-    "axios": "^1.4.0",
-    "dotenv": "^16.0.3",
-    "fs-extra": "^11.1.1",
-    "@supabase/supabase-js": "^2.21.0"
+    "@supabase/supabase-js": "^2.21.0",
+    "axios": "^1.16.0",
+    "dotenv": "^16.6.1",
+    "fs-extra": "^11.3.5",
+    "telegraf": "^4.12.2"
   },
   "scripts": {
     "start": "node src/bot/telegramBot.js"
-  }
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://hoopstreet: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@github.com/hoopstreet/ai-remote.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hoopstreet/ai-remote/issues"
+  },
+  "homepage": "https://github.com/hoopstreet/ai-remote#readme"
 }
