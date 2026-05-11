@@ -1,2 +1,2 @@
-VERSION: 1.1.0-schema-integrated
-STATUS: operational-with-supabase-schema
+VERSION: 1.2.0-draft-engine
+STATUS: multi-agent-drafting-enabled
