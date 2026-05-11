@@ -1,0 +1,19 @@
+{
+  "name": "ai-remote",
+  "version": "1.0.0",
+  "description": "AI-Remote Controller for Task Generation",
+  "main": "src/bot/telegramBot.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "telegraf": "^4.12.2",
+    "axios": "^1.4.0",
+    "dotenv": "^16.0.3",
+    "fs-extra": "^11.1.1",
+    "@supabase/supabase-js": "^2.21.0"
+  },
+  "scripts": {
+    "start": "node src/bot/telegramBot.js"
+  }
+}
