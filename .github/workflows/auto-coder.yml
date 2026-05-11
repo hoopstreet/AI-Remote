@@ -1,0 +1,41 @@
+name: AI-Remote Auto-Coder
+
+on:
+  push:
+    paths:
+      - 'docs/task.md'
+
+jobs:
+  generate-code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: AI Code Generation
+        env:
+          OPENROUTER_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          TASK=$(cat docs/task.md)
+          echo "Generating code for: $TASK"
+          
+          # Call OpenRouter to turn task.md into actual code
+          RESPONSE=$(curl -s -X POST "https://openrouter.ai/api/v1/chat/completions" \
+            -H "Authorization: Bearer $OPENROUTER_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"model\": \"google/gemini-2.0-flash-001\",
+              \"messages\": [{\"role\": \"user\", \"content\": \"Based on this task: '$TASK', generate the necessary code files. Wrap each file in ---FILENAME--- markers.\"}]
+            }")
+          
+          # Simplified: In a real scenario, you'd use a script to parse and write the files
+          echo "AI suggested changes. Applying to workspace..."
+
+      - name: Commit Generated Code
+        run: |
+          git config --global user.email "hoopstreet143@gmail.com"
+          git config --global user.name "hoopstreet"
+          git add .
+          git commit -m "AI: Automatically generated code based on task.md" || echo "No changes"
+          git push
