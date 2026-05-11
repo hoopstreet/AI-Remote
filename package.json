@@ -4,7 +4,7 @@
   "description": "AI-Remote Controller for Task Generation",
   "main": "src/main.js",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.21.0",
