@@ -1,0 +1,23 @@
+name: AI Task Runner
+on:
+  push:
+    paths:
+      - 'docs/Task.md'
+
+jobs:
+  analyze-and-plan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Initialize Task Context
+        run: |
+          echo "🚀 New Task Detected"
+          cat docs/Task.md
+          
+      - name: Blueprint Validation
+        run: |
+          echo "🔍 Checking DNA.md and SOURCE_MAP.md..."
+          # This is where future AI agents will run analysis
+          if [ ! -f docs/DNA.md ]; then echo "Error: DNA missing"; exit 1; fi
