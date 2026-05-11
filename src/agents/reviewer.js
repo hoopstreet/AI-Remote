@@ -1,4 +1,3 @@
-async function reviewTask(content) {
-    return { status: "APPROVED", issues: [] };
+export async function check(plan) {
+  return { status: plan.length > 5 ? "APPROVED" : "REJECTED" };
 }
-module.exports = { reviewTask };

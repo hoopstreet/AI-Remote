@@ -1,20 +1,15 @@
 {
   "name": "ai-remote",
   "version": "1.0.0",
-  "description": "AI-Remote Controller for Task Generation",
-  "main": "src/main.js",
-  "engines": {
-    "node": ">=18.0.0"
+  "type": "module",
+  "main": "src/bot/telegramBot.js",
+  "scripts": {
+    "start": "node src/bot/telegramBot.js"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.21.0",
-    "axios": "^1.16.0",
-    "dotenv": "^16.6.1",
-    "fs-extra": "^11.3.5",
-    "telegraf": "^4.12.2",
-    "@octokit/rest": "^21.0.0"
-  },
-  "scripts": {
-    "start": "node src/main.js"
+    "telegraf": "^4.16.3",
+    "dotenv": "^16.4.5",
+    "axios": "^1.6.8",
+    "fs-extra": "^11.2.0"
   }
 }

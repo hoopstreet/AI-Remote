@@ -1,14 +1,13 @@
-const planner = require("../agents/planner");
-const reviewer = require("../agents/reviewer");
-const security = require("../agents/security");
-const devops = require("../agents/devops");
+import { analyze } from "../agents/security.js";
+import { check } from "../agents/reviewer.js";
 
-async function runAgents(input, context) {
-  console.log("--- Starting CTO Agent Pipeline ---");
+const planner = { generate: async (i) => "Plan: " + i };
+const devops = { prepare: async () => ({ status: "ready" }) };
+
+export async function runAgents(input, context) {
+  console.log("--- Starting CTO Pipeline ---");
   const plan = await planner.generate(input, context);
-  const review = await reviewer.check(plan);
-  const risk = await security.analyze(plan);
-  const execution = await devops.prepare(plan);
-  return { plan, review, risk, execution };
+  const review = await check(plan);
+  const risk = analyze(plan);
+  return { plan, review, risk };
 }
-module.exports = { runAgents };
