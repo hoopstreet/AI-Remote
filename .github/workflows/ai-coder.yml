@@ -2,27 +2,29 @@ name: AI Autonomous Coder
 on:
   push:
     paths:
-      - 'docs/Task.md'
+      - 'docs/APPROVED_CHANGES.md'
 
 jobs:
-  execute-task:
+  execute-code:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: AI Code Execution
-        env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Apply Approved Code
+        run: node scripts/apply-code.js
+
+      - name: Commit and Push Changes
         run: |
-          echo "🤖 AI is reading docs/Task.md..."
-          # This script will eventually use a CLI tool or curl to 
-          # ask OpenRouter to generate the actual files based on the plan.
-          # For now, it logs the intent:
-          cat docs/Task.md
-          
-      - name: Update DNA
-        run: |
-          echo "🧬 Updating System DNA..."
-          echo "Last task executed at $(date)" >> docs/DNA.md
+          git config --global user.name "AI-Remote-Bot"
+          git config --global user.email "bot@hoopstreet.com"
+          git add .
+          git commit -m "chore: AI applied approved code changes" || echo "No changes to commit"
+          git push
