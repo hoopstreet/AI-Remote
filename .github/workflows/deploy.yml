@@ -1,0 +1,11 @@
+name: Deploy to Northflank
+on:
+  push:
+    branches: [ main ]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Northflank Deployment
+        run: |
+          curl -X POST "https://api.northflank.com/v1/projects/multiple-marketing/services/ai-remote/deployment"           -H "Authorization: Bearer ${{ secrets.NORTHFLANK_API_TOKEN }}"

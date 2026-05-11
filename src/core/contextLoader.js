@@ -1,4 +1,4 @@
-const { readFile } = require("../utils/gitHubClient");
+const { readFile } = require("../utils/githubClient");
 const { embed } = require("../memory/vectorStore");
 
 async function loadProjectContext(owner, repo) {
