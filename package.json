@@ -2,7 +2,7 @@
   "name": "ai-remote",
   "version": "1.0.0",
   "description": "AI-Remote Controller for Task Generation",
-  "main": "src/bot/telegramBot.js",
+  "main": "src/main.js",
   "engines": {
     "node": ">=20.0.0"
   },
@@ -14,7 +14,7 @@
     "telegraf": "^4.12.2"
   },
   "scripts": {
-    "start": "node src/bot/telegramBot.js"
+    "start": "node src/main.js"
   },
   "directories": {
     "doc": "docs"
