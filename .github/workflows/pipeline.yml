@@ -1,0 +1,30 @@
+name: AI-Remote CTO Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-engine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Using 20 in the cloud for better ESM support
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Agent Logic Check
+        run: |
+          node -e "import { analyze } from './src/agents/security.js'; console.log('Security Agent: OK');"
+          node -e "import { check } from './src/agents/reviewer.js'; console.log('Reviewer Agent: OK');"
+
+      - name: Environment Audit
+        run: |
+          if [ -z "$TELEGRAM_BOT_TOKEN" ]; then echo "Warning: Bot Token missing in Secrets"; fi
