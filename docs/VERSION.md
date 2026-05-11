@@ -1,2 +1,2 @@
-VERSION: 1.4.1
-STATUS: end-to-end-automation-active
+VERSION: 1.5.0-learning-enabled
+STATUS: learning-loop-active

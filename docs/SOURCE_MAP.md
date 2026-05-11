@@ -4,3 +4,4 @@
 - /scripts: iSH Tools & GitHub Execution Scripts
 - /.github/workflows: Automation (Task Runner & Coder)
 - Database: AI-Remote-Table (Supabase)
+- /docs/logs: AI Experience & Feedback Loop

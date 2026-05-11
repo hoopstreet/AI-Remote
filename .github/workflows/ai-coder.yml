@@ -19,6 +19,7 @@ jobs:
           node-version: '18'
 
       - name: Apply Approved Code
+        id: apply_step
         run: node scripts/apply-code.js
 
       - name: Commit and Push Changes
@@ -28,3 +29,15 @@ jobs:
           git add .
           git commit -m "chore: AI applied approved code changes" || echo "No changes to commit"
           git push
+
+      - name: Signal Success to Supabase
+        if: success()
+        run: |
+          # Placeholder for a curl command that updates the task status to 'deployed'
+          echo "Deployment successful."
+
+      - name: Signal Failure to Supabase
+        if: failure()
+        run: |
+          # Placeholder for a curl command that updates the task status to 'failed'
+          echo "Deployment failed."
