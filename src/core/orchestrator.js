@@ -1,3 +1,5 @@
+import dns from 'dns';
+dns.setDefaultResultOrder('ipv4first');
 import { analyze } from "../agents/security.js";
 import { check } from "../agents/reviewer.js";
 import axios from 'axios';
