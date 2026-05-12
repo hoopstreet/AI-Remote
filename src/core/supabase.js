@@ -12,12 +12,16 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 export const supabase = createClient(supabaseUrl, supabaseKey, {
+  db: {
+    schema: 'public'
+  },
   auth: {
     persistSession: false
   },
   realtime: {
-    websocket: ws
+    // This is the specific fix requested by the error log
+    transport: ws
   }
 });
 
-console.log("✅ Supabase Engine Locked & Connected via WebSockets");
+console.log("✅ Supabase Engine Handshaked with WebSocket Transport");
