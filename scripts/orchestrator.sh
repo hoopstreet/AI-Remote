@@ -9,7 +9,7 @@ echo "[SYSTEM v5] Starting Intelligence Loop..."
 sh agents/context/context.sh
 
 # AI Execution
-node scripts/ai-executor.js "$(grep -B 2 "Status: pending" docs/Task.md | head -n 1)"
+node scripts/ai-executor.cjs "$(grep -B 2 "Status: pending" docs/Task.md | head -n 1)"
 
 # Self-Learning & Scoring
 sh scoring/scorer.sh
