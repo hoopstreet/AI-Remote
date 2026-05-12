@@ -1,14 +1,14 @@
-# 🧬 AI-Remote DNA (v1.0.4)
-## System Governance
-- **Mode:** Elite Multi-Agent Orchestration.
-- **Safety:** Every task MUST be reviewed by the Reviewer Agent.
-- **Authority:** Human (Jasmine) provides final /push confirmation.
+# AI-REMOTE CORE DNA
+## TOOLS
+- UI: Telegram
+- BRAIN: OpenRouter
+- MEMORY: Supabase (Vector)
+- MUSCLE: GitHub Actions
+- HOST: Northflank
+- EMERGENCY: iSH iPhone
 
-## Technical Standards
-- **Platform:** Northflank (Server), Supabase (DB), GitHub (Repo).
-- **Communication:** Telegram Bot Hub.
-- **Workflow:** Task.md -> GitHub Actions -> Auto-Execution.
-
-## Operational Constraints
-- No direct pushes to main without a Task.md header.
-- Always check SOURCE_MAP.md before suggesting file edits.
+## COMMANDS
+- /task: AI Drafting & Risk Audit
+- /push: Force sync to GitHub Muscle
+- /status: Monitor Northflank & DB Health
+- /connect: Re-index Repository DNA
