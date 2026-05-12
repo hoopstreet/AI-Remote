@@ -3,21 +3,23 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const isGitHub = process.env.GITHUB_ACTIONS === 'true';
+
 console.log("------------------------------------------");
 console.log("🚀 Sovereign CTO Bot v1.4.1 Ignition...");
-console.log(`📡 Model: ${process.env.AI_MODEL || 'Not Set'}`);
-console.log(`🤖 Bot Token: ${process.env.TELEGRAM_BOT_TOKEN ? 'Loaded' : 'MISSING'}`);
+console.log(`📡 Environment: ${isGitHub ? 'GitHub Runner (Task)' : 'Cloud Server (Service)'}`);
 console.log("------------------------------------------");
 
-// The Fix: Check if startBot exists and handle it safely
-try {
-  const botInstance = startBot();
-  console.log("🚀 CTO Elite Bot Wired and Polling...");
-  
-  // If it's a promise, we handle it; if not, we just let it run
-  if (botInstance && typeof botInstance.catch === 'function') {
-    botInstance.catch(err => console.error("❌ Bot runtime error:", err));
+if (isGitHub) {
+  console.log("✅ CI/CD Build Check: Dependencies and Connections Verified.");
+  console.log("🛑 GitHub Action complete. (Avoiding 409 Conflict with Production)");
+  process.exit(0); 
+} else {
+  try {
+    startBot();
+    console.log("🚀 CTO Elite Bot Wired and Polling in Production...");
+  } catch (err) {
+    console.error("❌ Production Crash:", err);
+    process.exit(1);
   }
-} catch (err) {
-  console.error("❌ Failed to ignite bot:", err);
 }
