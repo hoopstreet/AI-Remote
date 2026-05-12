@@ -1,0 +1,7 @@
+name: Evolution
+on: push
+jobs:
+  evolve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4

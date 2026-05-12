@@ -1,0 +1,7 @@
+name: Merger
+on: push
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4

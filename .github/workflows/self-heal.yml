@@ -1,0 +1,7 @@
+name: Self Heal
+on: push
+jobs:
+  heal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4

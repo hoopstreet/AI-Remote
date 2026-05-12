@@ -1,0 +1,7 @@
+name: Distributor
+on: push
+jobs:
+  distribute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4

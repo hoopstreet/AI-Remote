@@ -1,0 +1,7 @@
+name: Pipeline
+on: push
+jobs:
+  pipe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4

@@ -1,0 +1,8 @@
+name: AI Coder
+on: push
+jobs:
+  code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node src/ai/agents.js

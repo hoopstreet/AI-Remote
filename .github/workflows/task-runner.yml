@@ -1,0 +1,7 @@
+name: Task Runner
+on: push
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4

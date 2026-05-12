@@ -1,0 +1,7 @@
+name: State Sync
+on: push
+jobs:
+  state:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4

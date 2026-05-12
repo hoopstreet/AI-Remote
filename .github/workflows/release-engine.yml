@@ -1,0 +1,7 @@
+name: Release Engine
+on: push
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
