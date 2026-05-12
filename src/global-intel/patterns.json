@@ -1,13 +1,5 @@
 {
-  "response_style": {
-    "tone": "concise, structured, actionable",
-    "max_suggestions": 5
-  },
-  "rules": [
-    "always provide analysis first",
-    "bundle related tasks",
-    "avoid breaking changes",
-    "respect versioning"
-  ],
-  "learned": []
+  "successes": [],
+  "failures": [],
+  "reusable_modules": []
 }
