@@ -2,14 +2,13 @@ import { supabase } from '../core/supabase.js';
 
 export async function loadProjectContext(repoName, url) {
     try {
-        // Upsert uses the unique constraint on repo_name to prevent duplicates
         const { error } = await supabase
             .from('projects')
             .upsert([
                 { 
-                    name: repoName, 
-                    repo_url: url, 
-                    repo_name: repoName.includes('/') ? repoName : `hoopstreet/${repoName}`
+                    repository_name: repoName, 
+                    repository_url: url,
+                    repo_name: repoName // Keeping this for the unique constraint check
                 }
             ], { onConflict: 'repo_name' });
 
@@ -24,7 +23,7 @@ export async function loadProjectContext(repoName, url) {
 export async function listProjects() {
     const { data, error } = await supabase
         .from('projects')
-        .select('name, repo_url');
+        .select('repository_name, repository_url');
     
     if (error) {
         console.error("❌ List Projects Error:", error.message);
