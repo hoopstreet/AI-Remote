@@ -1,0 +1,30 @@
+name: AI Self-Correction Loop
+on:
+  workflow_run:
+    workflows: ["AI Professional Coder"]
+    types: [completed]
+jobs:
+  test-and-fix:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Tester Agent
+        run: |
+          chmod +x scripts/tests.sh
+          ./scripts/tests.sh || echo "TESTS_FAILED=true" >> $GITHUB_ENV
+      - name: Trigger Fixer Agent (if needed)
+        if: env.TESTS_FAILED == 'true'
+        env:
+          OPENROUTER_KEY: ${{ secrets.OPENROUTER_KEY }}
+        run: |
+          chmod +x scripts/fixer.sh
+          ./scripts/fixer.sh "Fix the build errors in the previous run"
+      - name: Commit Fixes
+        if: env.TESTS_FAILED == 'true'
+        run: |
+          git config --global user.name "AI-Fixer-Agent"
+          git config --global user.email "fixer@ai-remote.io"
+          git add .
+          git commit -m "FIX: AI-generated self-correction for build errors"
+          git push origin main

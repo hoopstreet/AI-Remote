@@ -1,0 +1,25 @@
+name: AI Intelligence Audit
+on:
+  push:
+    paths:
+      - 'src/**'
+      - 'scripts/**'
+jobs:
+  analyze-evolution:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Analyzer & Memory Agent
+        env:
+          OPENROUTER_KEY: ${{ secrets.OPENROUTER_KEY }}
+        run: |
+          node src/global-intel/learner.js
+          chmod +x scripts/memory.sh
+          ./scripts/memory.sh
+      - name: Sync Knowledge Base
+        run: |
+          git config --global user.name "AI-CTO-Brain"
+          git config --global user.email "brain@ai-remote.io"
+          git add docs/KNOWLEDGE_BASE.md src/global-intel/
+          git commit -m "INTEL: Updated knowledge base and patterns [skip ci]" || echo "No intel updates"
+          git push origin main
