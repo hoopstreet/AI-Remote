@@ -13,8 +13,8 @@ if (!supabaseUrl || !supabaseKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseKey, {
   db: {
-    // This connects the bot directly to your custom schema
-    schema: 'AI-Remote-Table' 
+    // Wrapping in double quotes is mandatory for hyphenated schema names
+    schema: '"AI-Remote-Table"' 
   },
   auth: {
     persistSession: false
