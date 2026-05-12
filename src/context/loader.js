@@ -1,6 +1,7 @@
 import { supabase } from '../core/supabase.js';
 
-export async function loadProjectContext(repoName, url) {
+// Renamed to connectProject to match what telegramBot.js expects
+export async function connectProject(repoName, url) {
     try {
         const { error } = await supabase
             .from('projects')
@@ -9,7 +10,7 @@ export async function loadProjectContext(repoName, url) {
                     repository_name: repoName, 
                     repository_url: url
                 }
-            ], { onConflict: 'repository_name' }); // Matches the renamed column
+            ], { onConflict: 'repository_name' });
 
         if (error) throw error;
         return true;
@@ -22,7 +23,7 @@ export async function loadProjectContext(repoName, url) {
 export async function listProjects() {
     const { data, error } = await supabase
         .from('projects')
-        .select('id, repository_name, repository_url'); // Now including ID for internal mapping
+        .select('id, repository_name, repository_url');
     
     if (error) {
         console.error("❌ List Projects Error:", error.message);
