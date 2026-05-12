@@ -1,16 +1,13 @@
 #!/bin/sh
 cd ~/ai-remote
 
-USER="hoopstreet"
-REPO="ai-remote"
+# Ensure the remote is set to SSH
+git remote set-url origin git@github.com:hoopstreet/ai-remote.git
 
-# Change the remote to SSH if it isn't already
-git remote set-url origin git@github.com:${USER}/${REPO}.git
-
-echo "📦 Committing..."
+echo "📦 Committing project updates (Ignoring .env)..."
 git add .
-git commit -m "iSH SSH Push: $(date)"
+# This will specifically avoid adding .env if .gitignore is working
+git commit -m "iSH Build Sync: $(date)"
 
-echo "🚀 Pushing to GitHub via Deploy Key..."
-# Use -f to ensure the Task.md updates always go through
+echo "🚀 Pushing to GitHub via Secure SSH Key..."
 git push -f origin main
