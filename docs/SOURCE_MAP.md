@@ -1,5 +1,5 @@
 # Project Source Map
-Generated on: Tue May 12 10:30:00 UTC 2026
+Generated on: Tue May 12 10:35:29 UTC 2026
 ## Directory Structure
 ```
 .
@@ -93,6 +93,7 @@ Generated on: Tue May 12 10:30:00 UTC 2026
 ./scripts/source-map.sh
 ./scripts/orchestrator.sh
 ./scripts/bug-detector.sh
+./scripts/task-runner.sh
 ./scripts/saas-generator.sh
 ./docs
 ./docs/Roadmap.md
