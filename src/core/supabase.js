@@ -8,17 +8,16 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  console.error("❌ Missing Supabase Credentials in Environment");
+  console.error("❌ CRITICAL: Missing Supabase Credentials");
 }
 
-// The Fix: Explicitly providing the WebSocket transport for Node.js
 export const supabase = createClient(supabaseUrl, supabaseKey, {
-  global: {
-    fetch: (...args) => fetch(...args),
+  auth: {
+    persistSession: false
   },
   realtime: {
-    websocket: ws,
-  },
+    websocket: ws
+  }
 });
 
-console.log("✅ Supabase Client Initialized with WebSocket Transport");
+console.log("✅ Supabase Engine Locked & Connected via WebSockets");
