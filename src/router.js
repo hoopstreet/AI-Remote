@@ -4,14 +4,20 @@ const { scoreRisk } = require("./agents/risk");
 const { reviewTask } = require("./agents/reviewer");
 const { mergeDrafts } = require("./parser/mergeEngine");
 const { pushFile } = require("./github/github");
+const { triggerReindex } = require("./context/reindex");
 
 async function handleMessage(ctx) {
     const text = ctx.message.text;
     const userId = ctx.from.id;
-    const project = "hoopstreet/ai-remote"; // Using your current repo
+    const project = "hoopstreet/ai-remote"; 
     const [owner, repo] = project.split("/");
 
-    // 1. View Drafts
+    // 1. Context Refresh (Manual Re-index)
+    if (text === "/refresh") {
+        return await triggerReindex(owner, repo, ctx);
+    }
+
+    // 2. View Drafts
     if (text === "/drafts") {
         const drafts = await getDrafts(userId);
         if (drafts.length === 0) return ctx.reply("📭 No pending drafts.");
@@ -19,10 +25,10 @@ async function handleMessage(ctx) {
         drafts.forEach((d, i) => {
             list += `${i + 1}. [${d.risk}] ${d.content.split('\n')[0].substring(0, 30)}...\n`;
         });
-        return ctx.reply(list + "\nCommands:\n`/review [n]`\n`/merge 1,2`\n`/push [n]`", { parse_mode: 'Markdown' });
+        return ctx.reply(list + "\nCommands:\n`/review [n]`\n`/merge 1,2`\n`/push [n]`\n`/refresh`", { parse_mode: 'Markdown' });
     }
 
-    // 2. Merge Drafts
+    // 3. Merge Drafts
     if (text.startsWith("/merge")) {
         const indices = text.split(" ")[1].split(",").map(i => parseInt(i) - 1);
         const drafts = await getDrafts(userId);
@@ -36,7 +42,7 @@ async function handleMessage(ctx) {
         return ctx.reply(`✅ **Merged Draft Created!**\nRisk: ${risk}\nCheck /drafts to push.`);
     }
 
-    // 3. Push to GitHub
+    // 4. Push to GitHub
     if (text.startsWith("/push")) {
         const index = parseInt(text.split(" ")[1]) - 1;
         const drafts = await getDrafts(userId);
@@ -49,10 +55,10 @@ async function handleMessage(ctx) {
             content: taskToPush,
             message: "Autonomous task trigger from Telegram"
         });
-        return ctx.reply("🏁 **Success!** GitHub Actions is now executing the code.");
+        return ctx.reply("🏁 **Success!** GitHub Actions is now executing.");
     }
 
-    // 4. Chat -> Draft
+    // 5. Chat -> Draft (The Default Intelligence Mode)
     if (!text.startsWith("/")) {
         const taskContent = await generatePlan(text); 
         const risk = scoreRisk(taskContent);
