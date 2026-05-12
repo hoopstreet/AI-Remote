@@ -1,8 +1,7 @@
-import fs from 'fs-extra';
+import fs from 'node:fs/promises';
 import { supabase } from '../core/supabase.js';
 
-// Global Intelligence Learning Logic
 export const syncKnowledge = async () => {
-    console.log("🧠 Syncing Global Intelligence...");
-    // Logic for learning from logs goes here
+    console.log("🧠 Syncing Global Intelligence via Native FS...");
+    // Logic for learning from logs
 };
