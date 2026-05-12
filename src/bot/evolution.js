@@ -1,5 +1,8 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function getGlobalFailures() {
     try {
@@ -8,7 +11,7 @@ function getGlobalFailures() {
     } catch (e) { return []; }
 }
 
-function analyzeArchitecture() {
+export function analyzeArchitecture() {
     const failures = getGlobalFailures();
     const clusters = { AUTH: 0, DB: 0, API: 0 };
     
@@ -30,5 +33,3 @@ function analyzeArchitecture() {
 
     return evolutionNeeded ? report : "✅ *Architecture Stable:* No systemic patterns detected.";
 }
-
-module.exports = { analyzeArchitecture };
