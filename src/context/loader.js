@@ -7,10 +7,9 @@ export async function loadProjectContext(repoName, url) {
             .upsert([
                 { 
                     repository_name: repoName, 
-                    repository_url: url,
-                    repo_name: repoName // Keeping this for the unique constraint check
+                    repository_url: url
                 }
-            ], { onConflict: 'repo_name' });
+            ], { onConflict: 'repository_name' }); // Matches the renamed column
 
         if (error) throw error;
         return true;
@@ -23,7 +22,7 @@ export async function loadProjectContext(repoName, url) {
 export async function listProjects() {
     const { data, error } = await supabase
         .from('projects')
-        .select('repository_name, repository_url');
+        .select('id, repository_name, repository_url'); // Now including ID for internal mapping
     
     if (error) {
         console.error("❌ List Projects Error:", error.message);
