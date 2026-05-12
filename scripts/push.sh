@@ -1,21 +1,20 @@
 #!/bin/sh
 cd ~/ai-remote
 
-# 1. Clean the token (Remove quotes, carriage returns, and spaces)
-RAW_TOKEN=$(grep GH_TOKEN .env | cut -d'=' -f2)
-GH_TOKEN=$(echo $RAW_TOKEN | tr -d '"' | tr -d '\r' | tr -d ' ')
+# Extract and clean tokens
+RAW_TOKEN=$(grep GH_TOKEN .env | cut -d'=' -f2 | tr -d '"' | tr -d '\r' | tr -d ' ')
 USER="hoopstreet"
 REPO="github.com/hoopstreet/ai-remote.git"
 
-if [ -z "$GH_TOKEN" ]; then
-    echo "❌ Error: GH_TOKEN not found in .env"
+if [ -z "$RAW_TOKEN" ]; then
+    echo "❌ Error: GH_TOKEN is empty."
     exit 1
 fi
 
-echo "📦 Syncing changes..."
+echo "📦 Committing build..."
 git add .
-git commit -m "iSH Update: $(date)"
+git commit -m "iSH Build Sync: $(date)"
 
-echo "🚀 Pushing to GitHub..."
-# Using the token directly in the URL for headless auth
-git push -f "https://${USER}:${GH_TOKEN}@${REPO}" main
+echo "🚀 Pushing to GitHub via Token..."
+# Headless authentication
+git push -f "https://${USER}:${RAW_TOKEN}@${REPO}" main
