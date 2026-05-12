@@ -1,11 +1,9 @@
-#!/bin/sh
-cd ~/ish-dev || exit
-MAP="docs/SOURCE_MAP.md"
-echo "[SOURCE MAP] Updating..."
-DATE=$(date +"%Y-%m-%d")
-echo "\n## $DATE" >> "$MAP"
-if [ -f src/output.js ]; then
-  echo "- src/output.js : generated/modified" >> "$MAP"
-fi
-echo "[SOURCE MAP] Done"
-sh scripts/version.sh
+#!/bin/bash
+echo "--- GENERATING SOURCE MAP ---"
+echo "# Project Source Map" > docs/SOURCE_MAP.md
+echo "Generated on: $(date)" >> docs/SOURCE_MAP.md
+echo "## Directory Structure" >> docs/SOURCE_MAP.md
+echo '```' >> docs/SOURCE_MAP.md
+find . -maxdepth 3 -not -path '*/.*' -not -path './node_modules*' >> docs/SOURCE_MAP.md
+echo '```' >> docs/SOURCE_MAP.md
+echo "Source map updated successfully."
