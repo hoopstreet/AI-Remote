@@ -1,0 +1,12 @@
+name: AI Code Generator
+on:
+  push:
+    paths:
+      - 'docs/Task.md'
+jobs:
+  generate-code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Execute
+        run: echo "AI Agent triggered via docs/Task.md update"
