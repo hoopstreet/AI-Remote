@@ -1,27 +1,31 @@
 import { supabase } from './supabase.js';
 
-const GH_TOKEN = process.env.GH_TOKEN;
-const REPO_OWNER = "hoopstreet";
+const CREDENTIALS = {
+  gh: process.env.GH_TOKEN,
+  sb: process.env.SUPABASE_SERVICE_ROLE_KEY,
+  ai: process.env.OPENROUTER_API_KEY,
+  lock: "lockode"
+};
 
-export const dispatchTask = async (repoName, workflowId = 'status-check.yml') => {
-  const url = `https://api.github.com/repos/${REPO_OWNER}/${repoName}/actions/workflows/${workflowId}/dispatches`;
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${GH_TOKEN}`,
-        'Accept': 'application/vnd.github+json',
-        'X-GitHub-Api-Version': '2022-11-28'
-      },
-      body: JSON.stringify({ ref: 'main' })
-    });
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message);
-    }
-    return { success: true, message: `Task dispatched to ${repoName}` };
-  } catch (err) {
-    console.error("❌ Router Error:", err.message);
-    return { success: false, error: err.message };
-  }
+export const handleCommand = async (command, repo = "ai-remote", payload = {}) => {
+  console.log(`🔐 System Lock Active: Executing ${command}`);
+  
+  const routes = {
+    "status": `https://api.github.com/repos/hoopstreet/${repo}/actions/workflows/status-check.yml/dispatches`,
+    "push": `https://api.github.com/repos/hoopstreet/${repo}/dispatches`,
+    "task": `https://api.github.com/repos/hoopstreet/${repo}/actions/workflows/task-runner.yml/dispatches`
+  };
+
+  if (!routes[command]) return { error: "Invalid Node Command" };
+
+  const response = await fetch(routes[command], {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${CREDENTIALS.gh}`,
+      'Accept': 'application/vnd.github+json',
+    },
+    body: JSON.stringify({ ref: 'main', inputs: payload })
+  });
+
+  return response.ok ? { status: "Synced" } : { status: "Failed" };
 };
