@@ -13,7 +13,7 @@ if (!supabaseUrl || !supabaseKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseKey, {
   db: {
-    // CRITICAL: Pointing to your custom schema instead of 'public'
+    // This connects the bot directly to your custom schema
     schema: 'AI-Remote-Table' 
   },
   auth: {
