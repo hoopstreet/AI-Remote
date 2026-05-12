@@ -1,16 +1,22 @@
 #!/bin/sh
-# This script bridges Telegram tasks to the GitHub Actions trigger (Task.md)
+cd ~/ai-remote || exit
 
-TASK_FILE="../docs/Task.md"
-mkdir -p ../docs
+echo "[SYSTEM v5] Initializing Environment..."
+mkdir -p feedback tmp src docs/logs revenue/gateways
 
-# Capture the input from the Telegram bot
-TASK_INPUT="$1"
+echo "[SYSTEM v5] Starting Intelligence Loop..."
+# Context awareness
+sh agents/context/context.sh
 
-echo "📝 Logged Task: $TASK_INPUT"
+# AI Execution
+node scripts/ai-executor.js "$(grep -B 2 "Status: pending" docs/Task.md | head -n 1)"
 
-# Append the task to the Task.md file for GitHub Actions to read
-echo "- [ ] TASK: $TASK_INPUT (Generated via Telegram: $(date))" >> "$TASK_FILE"
+# Self-Learning & Scoring
+sh scoring/scorer.sh
+sh feedback/feedback.sh
 
-# Output for the Telegram bot to send back to you
-echo "Successfully added to Task.md. GitHub Actions will process this after /confirm."
+# Distribution
+sh scripts/saas-generator.sh
+sh scripts/supabase-sync.sh
+
+echo "[SYSTEM v5] Cycle Complete."
