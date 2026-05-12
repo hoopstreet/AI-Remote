@@ -1,7 +1,7 @@
 # TASK QUEUE
 
-## T-001: Create API Health Endpoint
+## T-002: User Authentication & Database Setup
 - **Priority**: High
-- **Type**: Feature
-- **Objective**: Create src/status.js that returns system uptime and version.
+- **Type**: SaaS-Core
+- **Objective**: Create supabase/schema.sql with a 'users' table and 'subscriptions' table.
 - **Status**: pending
