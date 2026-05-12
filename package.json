@@ -1,18 +1,16 @@
 {
+  "name": "ai-remote-fleet",
+  "version": "1.0.0",
   "type": "module",
-  "name": "ai-remote-final-engine",
-  "version": "1.4.0",
+  "description": "AI Remote Command Center",
   "main": "src/main.js",
   "scripts": {
-    "start": "node src/main.js",
-    "build": "npm install"
+    "start": "node src/main.js"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.43.2",
-    "axios": "^1.6.0",
-    "dotenv": "^16.4.5",
-    "fs-extra": "^11.2.0",
-    "telegraf": "^4.16.3",
-    "ws": "^8.20.1"
+    "@supabase/supabase-js": "^2.38.0",
+    "dotenv": "^16.3.1",
+    "node-telegram-bot-api": "^0.64.0",
+    "node-fetch": "^3.3.2"
   }
 }
