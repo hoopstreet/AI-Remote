@@ -1,16 +1,21 @@
 #!/bin/sh
-# Navigate to the root directory
-cd ..
+cd ~/ai-remote
 
-# Extract the GitHub token safely
-GH_TOKEN=$(grep GH_TOKEN .env | cut -d'=' -f2 | tr -d '"' | tr -d '\r')
+# 1. Clean the token (Remove quotes, carriage returns, and spaces)
+RAW_TOKEN=$(grep GH_TOKEN .env | cut -d'=' -f2)
+GH_TOKEN=$(echo $RAW_TOKEN | tr -d '"' | tr -d '\r' | tr -d ' ')
 USER="hoopstreet"
 REPO="github.com/hoopstreet/ai-remote.git"
 
-echo "📦 Pushing changes to GitHub for Northflank deployment..."
+if [ -z "$GH_TOKEN" ]; then
+    echo "❌ Error: GH_TOKEN not found in .env"
+    exit 1
+fi
 
+echo "📦 Syncing changes..."
 git add .
-git commit -m "Build update from iSH: $(date)"
-git push -f "https://${USER}:${GH_TOKEN}@${REPO}" main
+git commit -m "iSH Update: $(date)"
 
-echo "🚀 Push complete. Check Northflank for auto-deploy status."
+echo "🚀 Pushing to GitHub..."
+# Using the token directly in the URL for headless auth
+git push -f "https://${USER}:${GH_TOKEN}@${REPO}" main
