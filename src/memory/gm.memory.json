@@ -1,1 +1,11 @@
-{}
+{
+  "response_style": {
+    "tone": "concise, professional, actionable",
+    "max_suggestions": 5
+  },
+  "learned_patterns": [],
+  "user_preferences": {
+    "push_style": "bundle",
+    "safety_level": "high"
+  }
+}
