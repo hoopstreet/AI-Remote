@@ -1,5 +1,6 @@
 # Project DNA: AI-Remote CTO
-- Type: Autonomous DevOps Multi-Agent System
-- Environment: iPhone (iSH) / Northflank (Cloud) / GitHub (Engine)
-- Version: 1.0.0
-- Memory Status: Operational
+- Version: 1.0.1
+- Schema: AI-Remote-Table (Hardened)
+- Roles: [anon, authenticated, service_role]
+- SaaS: Users/Subscriptions Enabled
+- Intelligence: Multi-Agent Logic Active
