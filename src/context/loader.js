@@ -1,25 +1,16 @@
-const axios = require("axios");
+import { supabase } from '../core/supabase.js';
 
-async function readFile(owner, repo, path) {
-    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-    const res = await axios.get(url, {
-        headers: { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
-    });
-    return Buffer.from(res.data.content, "base64").toString("utf-8");
-}
+export async function connectProject(ctx) {
+    const url = ctx.message.text.split(' ')[1];
 
-async function loadProjectContext(owner, repo) {
-    const criticalFiles = ["docs/DNA.md", "docs/Roadmap.md", "docs/SOURCE_MAP.md", "docs/VERSION.md"];
-    let contextDump = "";
-    for (const file of criticalFiles) {
-        try {
-            const content = await readFile(owner, repo, file);
-            contextDump += `### FILE: ${file}\n${content}\n\n`;
-        } catch (e) {
-            contextDump += `### FILE: ${file}\n(Not found or empty)\n\n`;
-        }
+    if (!url) {
+        const { data } = await supabase.from('projects').select('name, repo_url');
+        const list = data?.map((p, i) => `${i+1}. 📂 **${p.name}**`).join('\n') || "No projects found.";
+        return ctx.reply(`🏗️ **Existing Project DNA:**\n\n${list}\n\n*Use /connect <url> to add new.*`, { parse_mode: 'Markdown' });
     }
-    return contextDump;
-}
 
-module.exports = { loadProjectContext };
+    const repoName = url.split('/').pop();
+    await supabase.from('projects').upsert([{ name: repoName, repo_url: url }]);
+    
+    ctx.reply(`✅ **Connected to ${repoName}**\nAuto-Indexing DNA & Roadmap...`);
+}
