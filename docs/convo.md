@@ -3719,122 +3719,14 @@ If you want next step, I can:
 👉 Convert this into production-ready iSH-compatible full code (all modules wired together)
 👉 With your constraints (cat << 'EOF', no nano, etc.)
 
-Just say:
-
-“Generate full hardened repo (iSH ready)”
-
-I will provide you all my credintials don't mind If it's leak, the main goal here is based on our conversation to fully working function this AI-Remote to github repository Using the telegram and the github actions workflow can build using and use the workflows needs to input into github repository workforce based on this projects and credintials,,
 
 I have already added this to github actions secret and Nortfflank environment..
 
-👤 User Information
-🆔 TG_USER_ID: 8296776401
-👤 First Name: Xenia
-👥 Last Name: Xu
-🔗 Username: @XeniaXu8
-Telegram bot name: Telegram AI-Remote
-Telegram bot link: t.me/airemote8_bot
-
-TG_BOT_TOKEN: 8688447736:AAG-Jd-
-
-GitHub Repository:
-https://github.com/hoopstreet/AI-Remote
-
-GitHub username: hoopstreet
-GitHub Gmail: hoopstreet143@gmail.com
-
-GH_TOKEN: 
-
-
-OPENROUTER_API_KEY:
-sk-or-v1-
-
-SUPABASE_URL:
-https://ixdukafvxqermhgoczou.supabase.co/
-
-SUPABASE_REST_URL:
-
-
-SUPABASE_SCHEMA:
-
-
-SUPABASE_SERVICE_ROLE_KEY:
-
-
-SUPABASE_ANON_KEY:
-
-
-SUPABASE_PUBLIC_KEY:
-
-
-SUPABASE_SECRET_KEY:
-
-
-SUPABASE_JWT_KEY_ID:
-
-
-SUPABASE_JWT_SECRET_KEY:
-
-SUPABASE_DISCOVERY_URL:
-https://ixdukafvxqermhgoczou.supabase.co/auth/v1/.well-known/jwks.json
-
-SUPABASE__S3_URL:
-https://ixdukafvxqermhgoczou.storage.supabase.co/storage/v1/s3
-
-SUPABASE_S3_KEY_ID:
-
-
-SUPABASE_S3_SECRET_KEY:
-
-
-Public Key (JSON Web Key format
-
-{
-  "x": "WzdyaOXqQ6jd4M5dMa_AUtdRvuc_54TBgYaMQDq-O_I",
-  "y": "6OpkfW4fdBvL2U-Jwhc6B2KSne1mRTfvmMwnbH7NEpk",
-  "alg": "ES256",
-  "crv": "P-256",
-  "ext": true,
-  "kid": "d6fcacbc-2507-4beb-90fe-d6bda8df4e91",
-  "kty": "EC",
-  "key_ops": [
-    "verify"
-  ]
-}
-
-DOCKERHUB_URL:
-https://hub.docker.com/repository/docker/hoopstreet/ai-remote/general
-
-DOCKERHUB_USERNAME: hoopstreet
-
-DOCKERHUB_TOKEN: 
-
-
-HF_URL:
-https://huggingface.co/spaces/hoopstreet143/AI-Remote
-
-HF_TOKEN:
-
-
-NF_PROJECT_URL:
-https://app.northflank.com/t/hoopstreets-team/project/multiple-marketing
-
-NF_SERVICE_URL:
-https://app.northflank.com/t/hoopstreets-team/project/multiple-marketing/services/ai-remote
-
-NF_TOKEN:
-
-p01--ai-remote--fgfy9kjf5s56.code.run
-ai-remote:8080
-ai-remote:22
-
--------
-
-I’m going to stop you right there—because this is one of those moments where moving fast will actually break everything.
-
-You just exposed live production credentials (GitHub token, Telegram bot token, Supabase service role key, Docker, Northflank, etc.).
-
-That’s not a minor risk. That’s full system compromise level.
+• Telegram (The Brain/Remote): This is now your primary driver. You tell the bot what to build, and it writes to AI-Remote-Table.tasks.
+• Northflank (The Server): Hosts the bot and the orchestrator 24/7, keeping the connection between Telegram and GitHub alive.
+• GitHub Actions (The Muscle): Automatically picks up the tasks you send via Telegram and writes the code.
+• Supabase (The Memory): Stores every detail in the AI-Remote-Table schema, from user data to AI performance logs.
+• iSH (The Emergency Toolbox): You only need to open this if you need to perform a manual "surgery" on the system or reset a configuration.
 
 ⸻
 
