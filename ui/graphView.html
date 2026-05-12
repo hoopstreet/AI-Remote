@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI CTO Task Graph</title>
+    <script src="https://cdn.jsdelivr.net/npm/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>#graph { width: 100%; height: 600px; border: 1px solid lightgray; }</style>
+</head>
+<body>
+    <h2>🚀 Autonomous Execution Graph</h2>
+    <div id="graph"></div>
+    <script>
+        fetch('/data').then(res => res.json()).then(drafts => {
+            const nodes = [];
+            const edges = [];
+            Object.values(drafts).forEach((d, i) => {
+                nodes.push({ id: i, label: `Task ${i+1}\nRisk: ${d.risk}` });
+                if (d.dependsOn) d.dependsOn.forEach(dep => edges.push({ from: dep-1, to: i }));
+            });
+            new vis.Network(document.getElementById('graph'), { nodes, edges }, {});
+        });
+    </script>
+</body>
+</html>
