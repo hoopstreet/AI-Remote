@@ -1,5 +1,5 @@
 # Project Source Map
-Generated on: Tue May 12 11:53:29 UTC 2026
+Generated on: Tue May 12 12:02:05 UTC 2026
 ## Directory Structure
 ```
 .
@@ -9,11 +9,13 @@ Generated on: Tue May 12 11:53:29 UTC 2026
 ./src/agents/merger.js
 ./src/agents/explainer.js
 ./src/agents/approver.js
+./src/agents/merge.js
 ./src/agents/priority.js
 ./src/agents/risk.js
 ./src/agents/security.js
 ./src/agents/orchestrator.js
 ./src/agents/devops.js
+./src/agents/decision.js
 ./src/parser
 ./src/parser/taskParser.js
 ./src/parser/mergeEngine.js
