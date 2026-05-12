@@ -1,16 +1,34 @@
 import { supabase } from '../core/supabase.js';
 
-export async function connectProject(ctx) {
-    const url = ctx.message.text.split(' ')[1];
+export async function loadProjectContext(repoName, url) {
+    try {
+        // Upsert uses the unique constraint on repo_name to prevent duplicates
+        const { error } = await supabase
+            .from('projects')
+            .upsert([
+                { 
+                    name: repoName, 
+                    repo_url: url, 
+                    repo_name: repoName.includes('/') ? repoName : `hoopstreet/${repoName}`
+                }
+            ], { onConflict: 'repo_name' });
 
-    if (!url) {
-        const { data } = await supabase.from('projects').select('name, repo_url');
-        const list = data?.map((p, i) => `${i+1}. 📂 **${p.name}**`).join('\n') || "No projects found.";
-        return ctx.reply(`🏗️ **Existing Project DNA:**\n\n${list}\n\n*Use /connect <url> to add new.*`, { parse_mode: 'Markdown' });
+        if (error) throw error;
+        return true;
+    } catch (err) {
+        console.error("❌ Context Loader Error:", err.message);
+        return false;
     }
+}
 
-    const repoName = url.split('/').pop();
-    await supabase.from('projects').upsert([{ name: repoName, repo_url: url }]);
+export async function listProjects() {
+    const { data, error } = await supabase
+        .from('projects')
+        .select('name, repo_url');
     
-    ctx.reply(`✅ **Connected to ${repoName}**\nAuto-Indexing DNA & Roadmap...`);
+    if (error) {
+        console.error("❌ List Projects Error:", error.message);
+        return [];
+    }
+    return data;
 }
