@@ -1,8 +1,7 @@
 {
   "type": "module",
-  "name": "ai-remote-cto",
-  "version": "1.1.4",
-  "description": "Sovereign AI Remote CTO",
+  "name": "ai-remote-v2",
+  "version": "1.2.0",
   "main": "src/main.js",
   "scripts": {
     "start": "node src/main.js"
