@@ -1,7 +1,10 @@
-# TASK QUEUE
+# Project Tasks
 
-## T-002: User Authentication & Database Setup
-- **Priority**: High
-- **Type**: SaaS-Core
-- **Objective**: Create supabase/schema.sql with a 'users' table and 'subscriptions' table.
-- **Status**: pending
+## [v1.4.1] - Current
+- [x] Convert to ESM logic (Completed)
+- [x] Fix pathing for Docker (Completed)
+- [ ] Verify Telegram Ignition (Pending)
+
+## Status Schema
+Status: Active
+Priority: High
