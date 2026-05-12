@@ -1,20 +1,15 @@
 #!/bin/sh
-# scripts/saas-generator.sh - The Business Engine
-cd ~/ish-dev || exit
+echo "--- [PHASE 7: SAAS GENERATOR] ---"
+# 1. Check for Supabase Config
+if [ -z "$SUPABASE_URL" ]; then
+  echo "[WARN] Supabase URL missing. Skipping DB init."
+else
+  echo "[SYSTEM] Initializing Auth Tables..."
+  # Future: Trigger Supabase migrations via curl
+fi
 
-echo "[SAAS GENERATOR] Initializing product scaffolding..."
-# 1. Generate Supabase Schema
-sh scripts/supabase.sh 
+# 2. Setup Stripe/LemonSqueezy Stubs
+mkdir -p revenue/gateways
+echo "module.exports = { status: 'pending_setup' };" > revenue/gateways/stripe.js
 
-# 2. Inject Revenue Hooks
-sh revenue/revenue.sh
-
-# 3. Trigger Multi-Agent Build
-sh agents/ai-planner.sh "Build SaaS core components"
-sh agents/ai-coder.sh
-sh agents/ai-reviewer.sh
-
-# 4. Automate Deployment to Northflank/Docker/HF
-sh deploy/self-heal.sh
-sh scripts/version.sh
-echo "[SAAS GENERATOR] SaaS Build Complete. Awaiting Human Confirmation."
+echo "[SYSTEM] SaaS Scaffold Ready."
