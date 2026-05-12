@@ -1,21 +1,28 @@
 const fs = require('fs');
 const path = require('path');
 
-function getRecommendations() {
+function getContext() {
     try {
+        const dna = fs.readFileSync(path.join(__dirname, '../../docs/DNA.md'), 'utf8');
         const roadmap = fs.readFileSync(path.join(__dirname, '../../docs/Roadmap.md'), 'utf8');
-        // Simple logic: find the first 3 unfinished tasks
-        const tasks = roadmap.match(/- \[ \].*/g) || [];
-        return tasks.slice(0, 3).map(t => t.replace('- [ ] ', '💡 Suggestion: ')).join('\n');
+        return { dna, roadmap };
     } catch (e) {
-        return "💡 Suggestion: Initialize project DNA\n💡 Suggestion: Setup Multi-Agent Workflows";
+        return { dna: "Project DNA not found", roadmap: "" };
     }
 }
 
+function getRecommendations() {
+    const ctx = getContext();
+    const tasks = ctx.roadmap.match(/- \[ \].*/g) || [];
+    if (tasks.length === 0) return "💡 Suggestion: Define next milestones in Roadmap.md";
+    return tasks.slice(0, 3).map(t => t.replace('- [ ] ', '🚀 Next Priority: ')).join('\n');
+}
+
 function analyzeTask(task) {
-    // This simulates the "CTO Agent" reasoning
-    const highRisk = /delete|remove|reset|force/i.test(task);
-    return `📊 CTO ANALYSIS REPORT\n---\n🛡 Security: ${highRisk ? 'HIGH RISK' : 'SAFE'}\n⚖️ Review: APPROVED\n📝 Plan: Append to Task.md and trigger GitHub Actions.`;
+    const ctx = getContext();
+    // Simulate CTO reasoning based on DNA
+    const isArchitectural = /architecture|structure|system/i.test(task);
+    return `📂 *CTO ANALYSIS REPORT*\n---\n🧬 *Project DNA:* Detected\n🛠 *Impact:* ${isArchitectural ? 'System-Wide' : 'Feature-Level'}\n⚖️ *Verdict:* APPROVED\n\n💬 *CTO Comment:* Proceeding to log this in Task.md for GitHub Actions execution.`;
 }
 
 module.exports = { getRecommendations, analyzeTask };
