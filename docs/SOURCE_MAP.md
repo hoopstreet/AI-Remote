@@ -1,5 +1,5 @@
 # Project Source Map
-Generated on: Tue May 12 10:44:40 UTC 2026
+Generated on: Tue May 12 10:45:59 UTC 2026
 ## Directory Structure
 ```
 .
@@ -88,9 +88,11 @@ Generated on: Tue May 12 10:44:40 UTC 2026
 ./scripts/status.sh
 ./scripts/coder.sh
 ./scripts/tests.sh
+./scripts/supabase-sync.sh
 ./scripts/apply-code.js
 ./scripts/supabase.sh
 ./scripts/source-map.sh
+./scripts/ai-executor.js
 ./scripts/orchestrator.sh
 ./scripts/bug-detector.sh
 ./scripts/task-runner.sh
