@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "ai-remote-v2",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "main": "src/main.js",
   "scripts": {
     "start": "node src/main.js"
