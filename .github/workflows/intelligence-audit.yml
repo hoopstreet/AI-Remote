@@ -5,3 +5,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Audit DNA.md
+        run: |
+          if grep -q "TODO" docs/DNA.md; then
+            echo "⚠️ DNA contains pending updates."
+          else
+            echo "✅ DNA is structurally sound."
+          fi

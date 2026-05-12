@@ -5,3 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Scan for Environment Leaks
+        run: |
+          if [ -f .env ]; then
+            echo "❌ CRITICAL: .env file detected in repo!"
+            exit 1
+          fi

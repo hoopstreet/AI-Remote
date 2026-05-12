@@ -5,3 +5,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Clean Install
+        run: npm install --package-lock-only || npm audit fix --force
