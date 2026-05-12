@@ -1,8 +1,17 @@
 name: AI Coder
-on: push
+on:
+  workflow_dispatch:
 jobs:
   code:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - run: npm install
       - run: node src/ai/agents.js
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
