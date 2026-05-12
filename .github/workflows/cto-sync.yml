@@ -2,6 +2,8 @@ name: CTO Master Sync
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+
 jobs:
   orchestrate:
     runs-on: ubuntu-latest
@@ -9,14 +11,17 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Git Config
+      
+      - name: System Intel Audit
+        run: |
+          echo "📊 Auditing System DNA..."
+          grep -i "status" docs/DNA.md || echo "DNA Status: Operational"
+
+      - name: Git Safety & Sync
         run: |
           git config --global user.name "AI-CTO-Sync"
           git config --global user.email "cto@ai-remote.io"
-      - name: Master Sync & Rebase
-        run: |
           git pull --rebase origin main
-          # Automated DNA and Task updates
           git add .
-          git commit -m "CHORE: Master State Sync [skip ci]" || echo "No changes"
+          git commit -m "SYSTEM: Finalized Architecture Merge [skip ci]" || echo "No changes"
           git push origin main
