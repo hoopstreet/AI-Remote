@@ -13,15 +13,15 @@ if (!supabaseUrl || !supabaseKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseKey, {
   db: {
-    schema: 'public'
+    // CRITICAL: Pointing to your custom schema instead of 'public'
+    schema: 'AI-Remote-Table' 
   },
   auth: {
     persistSession: false
   },
   realtime: {
-    // This is the specific fix requested by the error log
     transport: ws
   }
 });
 
-console.log("✅ Supabase Engine Handshaked with WebSocket Transport");
+console.log("✅ Supabase Engine Handshaked with Schema: AI-Remote-Table");
