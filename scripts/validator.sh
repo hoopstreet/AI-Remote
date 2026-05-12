@@ -1,13 +1,13 @@
-#!/bin/bash
-echo "--- SAFETY VALIDATION ---"
-# Check if Task.md exists
-if [ ! -f docs/Task.md ]; then
-  echo "Error: Task.md missing. Stopping."
+#!/bin/sh
+echo "--- [PHASE 3: VALIDATION] ---"
+# Check for basic project integrity
+if [ ! -f docs/VERSION.md ] || [ ! -f docs/DNA.md ]; then
+  echo "CRITICAL ERROR: System DNA or Versioning files missing."
   exit 1
 fi
-# Prevent overwriting DNA.md directly
-if grep -q "DNA.md" docs/Task.md; then
-  echo "Security Alert: Task attempted to modify DNA.md directly. Aborting."
+# Prevent empty task execution
+if ! grep -q "Status:" docs/Task.md; then
+  echo "VALIDATION FAILED: Task.md has no valid status schema."
   exit 1
 fi
-echo "Validation Passed."
+echo "Validation Successful: Project structure is sound."

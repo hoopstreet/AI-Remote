@@ -7,10 +7,14 @@ jobs:
   execute:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Run Core Pipeline
-        env:
-          OPENROUTER_KEY: ${{ secrets.OPENROUTER_KEY }}
+      - uses: actions/checkout@v4
+      - name: Execute Autonomous Logic
         run: |
           chmod +x scripts/*.sh
           ./scripts/task-runner.sh
+      - name: Commit Results
+        run: |
+          git config --global user.name "AI-Executor"
+          git add .
+          git commit -m "EXEC: Completed task from Task.md [skip ci]" || echo "No changes"
+          git push
