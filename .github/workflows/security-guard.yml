@@ -1,0 +1,17 @@
+name: Security & Quality Guard
+on: [push]
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Secret Scan
+        uses: trufflesecurity/trufflehog@main
+        with:
+          extra_args: --debug --only-verified
+      - name: Dependency Check
+        run: npm audit || echo "Audit found vulnerabilities"
+      - name: Structure Validation
+        run: |
+          chmod +x scripts/validator.sh
+          ./scripts/validator.sh
