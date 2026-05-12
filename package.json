@@ -10,5 +10,22 @@
     "express": "^5.2.1",
     "node-telegram-bot-api": "^0.64.0",
     "telegraf": "^4.16.3"
-  }
+  },
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hoopstreet/ai-remote.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hoopstreet/ai-remote/issues"
+  },
+  "homepage": "https://github.com/hoopstreet/ai-remote#readme",
+  "description": ""
 }
