@@ -1,5 +1,5 @@
 # Project Source Map
-Generated on: Tue May 12 10:59:50 UTC 2026
+Generated on: Tue May 12 11:28:39 UTC 2026
 ## Directory Structure
 ```
 .
@@ -115,6 +115,8 @@ Generated on: Tue May 12 10:59:50 UTC 2026
 ./global-intel/patterns.json
 ./revenue
 ./revenue/revenue.sh
+./revenue/gateways
+./revenue/gateways/stripe.js
 ./ast
 ./ast/ast-check.sh
 ./deploy
