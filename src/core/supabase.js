@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import ws from 'ws';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -10,4 +11,14 @@ if (!supabaseUrl || !supabaseKey) {
   console.error("❌ Missing Supabase Credentials in Environment");
 }
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+// The Fix: Explicitly providing the WebSocket transport for Node.js
+export const supabase = createClient(supabaseUrl, supabaseKey, {
+  global: {
+    fetch: (...args) => fetch(...args),
+  },
+  realtime: {
+    websocket: ws,
+  },
+});
+
+console.log("✅ Supabase Client Initialized with WebSocket Transport");
