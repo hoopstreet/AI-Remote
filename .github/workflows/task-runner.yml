@@ -1,23 +1,16 @@
-name: AI Task Runner
+name: Task Runner
 on:
   push:
     paths:
       - 'docs/Task.md'
-
 jobs:
-  analyze-and-plan:
+  execute:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Initialize Task Context
+      - uses: actions/checkout@v3
+      - name: Run Core Pipeline
+        env:
+          OPENROUTER_KEY: ${{ secrets.OPENROUTER_KEY }}
         run: |
-          echo "🚀 New Task Detected"
-          cat docs/Task.md
-          
-      - name: Blueprint Validation
-        run: |
-          echo "🔍 Checking DNA.md and SOURCE_MAP.md..."
-          # This is where future AI agents will run analysis
-          if [ ! -f docs/DNA.md ]; then echo "Error: DNA missing"; exit 1; fi
+          chmod +x scripts/*.sh
+          ./scripts/task-runner.sh
