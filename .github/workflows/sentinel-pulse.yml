@@ -1,24 +1,17 @@
 name: Sentinel Pulse
-on: 
-  repository_dispatch:
-    types: [ci_result]
-
+on: [push]
 jobs:
-  update-global-intel:
+  sentinel-pulse:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Sync Intelligence
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - run: npm install
+      - name: System Audit
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          RESULT: ${{ github.event.client_payload.status }}
-        run: |
-          node -e "
-            import { createClient } from '@supabase/supabase-js';
-            const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
-            await supabase.from('logs').insert([{ 
-              type: 'INTEL_SYNC', 
-              content: 'CI Result: ' + process.env.RESULT 
-            }]);
-          "
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        run: node --check src/main.js
