@@ -1,25 +1,25 @@
+import { startTelegramBot } from '../bot/telegramBot.js';
 import { supabase } from './supabase.js';
 
 export async function launch() {
-    console.log("🤖 [BOT] Ignition sequence started...");
-    
     try {
-        // Test a quick pull from the 10-table elite schema
+        console.log("🤖 [CORE] Initializing Bot Modules...");
+        
+        // 1. Fetch settings from the Elite 11 bot_settings table
         const { data: settings, error } = await supabase
             .from('bot_settings')
             .select('*')
-            .limit(1);
+            .single();
 
         if (error) throw error;
 
-        console.log("🛰️ [BOT] System settings loaded. Bot is now ONLINE.");
+        // 2. Start the Telegram Engine
+        // This refers to your file in src/bot/telegramBot.js
+        const botInstance = await startTelegramBot(settings);
         
-        // YOUR TELEGRAM BOT LOGIC GOES HERE
-        // Example: bot.launch();
-        
-        return true;
-    } catch (err) {
-        console.error("❌ [BOT] Failed to initialize:", err.message);
-        return false;
+        return botInstance; 
+    } catch (error) {
+        console.error("❌ [CORE] Launch Sequence Interrupted:", error.message);
+        return null;
     }
 }
