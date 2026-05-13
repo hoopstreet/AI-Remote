@@ -1,4 +1,4 @@
-name: Executor
+name: AI Executor
 on: [push]
 jobs:
   execute:
@@ -9,10 +9,9 @@ jobs:
         with:
           node-version: 20
       - run: npm install
-      - name: Syntax & Connection Check
+      - name: Syntax Audit
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        # We run a check-only command so it doesn't conflict with Northflank
-        run: node --check src/main.js
+        # CRITICAL: We use 'test' to avoid 409 Conflicts with Northflank
+        run: npm test
