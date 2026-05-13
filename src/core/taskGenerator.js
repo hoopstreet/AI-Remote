@@ -1,23 +1,19 @@
 import { supabase } from './supabase.js';
 
-export const generateTaskReport = async (intent = "general") => {
-  console.log(`🧠 [PLANNER] Analyzing intent: ${intent}`);
+export const generateTaskReport = async (intent) => {
+  const draftId = Math.floor(Math.random() * 9000) + 1000;
   
-  // High-level structural audit
-  const recommendations = [
-    { task: "Consolidate handlers/bot.js into bot/telegramBot.js", priority: "High" },
-    { task: "Validate GH_TOKEN workflow permissions for /push", priority: "Critical" },
-    { task: "Sync SOURCE_MAP.md with new global-intel patterns", priority: "Medium" }
-  ];
-
   const { data, error } = await supabase
     .from('drafts_v2')
     .insert([{ 
-      title: `Analysis: ${intent}`, 
-      details: JSON.stringify(recommendations), 
+      id: draftId,
+      title: `Task: ${intent.substring(0, 20)}...`, 
+      details: intent, 
       status: "pending" 
-    }]);
+    }]).select();
 
-  if (error) throw new Error(error.message);
-  return { status: "Drafted", id: data?.[0]?.id };
+  return { 
+    id: draftId, 
+    recommendation: "💡 Next: 1. Refine Logic | 2. Bundle | 3. Push to GitHub" 
+  };
 };
