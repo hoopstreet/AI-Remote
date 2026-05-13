@@ -1,0 +1,24 @@
+name: Sentinel Pulse
+on: 
+  repository_dispatch:
+    types: [ci_result]
+
+jobs:
+  update-global-intel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Sync Intelligence
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          RESULT: ${{ github.event.client_payload.status }}
+        run: |
+          node -e "
+            import { createClient } from '@supabase/supabase-js';
+            const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+            await supabase.from('logs').insert([{ 
+              type: 'INTEL_SYNC', 
+              content: 'CI Result: ' + process.env.RESULT 
+            }]);
+          "
