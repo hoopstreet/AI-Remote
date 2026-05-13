@@ -6,19 +6,19 @@ dotenv.config();
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+// We define the schema here exactly as it appears in the dashboard
+const SCHEMA_NAME = 'AI-Remote-Table';
 
 export const supabase = createClient(supabaseUrl, supabaseKey, {
   db: {
-    schema: 'AI-Remote-Table' 
+    schema: SCHEMA_NAME
   },
   global: {
-    // This is the CRITICAL fix for Node 20
     fetch: (...args) => fetch(...args),
   },
   realtime: {
-    // Explicitly passing the WebSocket constructor
     transport: ws 
   }
 });
 
-console.log("✅ Supabase Engine Handshaked with Schema: AI-Remote-Table");
+console.log(`✅ Supabase Engine Handshaked: ${SCHEMA_NAME}`);

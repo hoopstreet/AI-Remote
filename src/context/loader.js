@@ -2,7 +2,8 @@ import { supabase } from '../core/supabase.js';
 
 export async function connectProject(repoName, url) {
     try {
-        // We explicitly point to the schema and table here
+        // We call the table without the schema prefix because 
+        // the client is already initialized to that schema
         const { error } = await supabase
             .from('projects')
             .upsert([
