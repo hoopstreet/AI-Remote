@@ -6,19 +6,10 @@ dotenv.config();
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-// We define the schema here exactly as it appears in the dashboard
-const SCHEMA_NAME = 'AI-Remote-Table';
 
+// MASTER LOCK: Force the client to use double-quotes for the custom schema
 export const supabase = createClient(supabaseUrl, supabaseKey, {
-  db: {
-    schema: SCHEMA_NAME
-  },
-  global: {
-    fetch: (...args) => fetch(...args),
-  },
-  realtime: {
-    transport: ws 
-  }
+  db: { schema: '"AI-Remote-Table"' },
+  global: { fetch: (...args) => fetch(...args) },
+  realtime: { transport: ws }
 });
-
-console.log(`✅ Supabase Engine Handshaked: ${SCHEMA_NAME}`);
