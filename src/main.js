@@ -1,23 +1,25 @@
-import { bot } from './core/bot.js';
-import { setupCommands } from './bot/telegramBot.js';
+import { runFullDiagnostic } from './core/sentinel.js';
+import { startBot } from './core/bot.js'; // Adjust based on your actual bot start file
 
-async function startBot() {
-    try {
-        console.log("🛰️ Initializing CTO Elite Commands...");
-        
-        // This is the missing link!
-        setupCommands();
-
-        console.log("🚀 Bot is now Polling...");
-        await bot.launch();
-
-    } catch (error) {
-        console.error("❌ Startup Error:", error.message);
+async function init() {
+    console.log("🚀 [SYSTEM] Initializing 24/7 Autonomous Mode...");
+    
+    // 1. Immediate Self-Heal on Startup
+    const health = await runFullDiagnostic();
+    
+    if (health.db && health.schema) {
+        console.log("✅ [SYSTEM] All connections mapped. Launching Bot...");
+        startBot();
+    } else {
+        console.error("⚠️ [SYSTEM] Mapping failed. Retrying in 30 seconds...");
+        setTimeout(init, 30000);
     }
 }
 
-// Global Handlers
-process.once('SIGINT', () => bot.stop('SIGINT'));
-process.once('SIGTERM', () => bot.stop('SIGTERM'));
+// 2. Background Heartbeat (Self-Heals every 60 mins)
+setInterval(async () => {
+    console.log("🛡️ [SENTINEL] Running scheduled 24/7 diagnostic...");
+    await runFullDiagnostic();
+}, 3600000);
 
-startBot();
+init();
