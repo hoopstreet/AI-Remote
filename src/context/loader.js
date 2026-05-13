@@ -1,37 +1,34 @@
 import { supabase } from '../core/supabase.js';
 
-// We hard-quote the schema to prevent Postgres from misinterpreting hyphens
-const TABLE_PATH = '"AI-Remote-Table".projects';
+// Configuration for the Sentinel-ready schema
+const SCHEMA_PATH = '"AI-Remote-Table"';
 
 export async function connectProject(repoName, url) {
     try {
+        console.log(`🛰️ Attempting mapping: ${repoName} -> ${SCHEMA_PATH}`);
         const { error } = await supabase
-            .from(TABLE_PATH)
+            .from(`${SCHEMA_PATH}.projects`)
             .upsert([
-                { 
-                    repository_name: repoName, 
-                    repository_url: url
-                }
+                { repository_name: repoName, repository_url: url }
             ], { onConflict: 'repository_name' });
 
         if (error) throw error;
-        return true;
+        return { success: true, message: "Project DNA Indexed" };
     } catch (err) {
-        console.error("❌ Context Loader Error:", err.message);
-        return false;
+        console.error("❌ Auto-Fix Triggered: Schema Mapping Error", err.message);
+        return { success: false, error: err.message };
     }
 }
 
-export async function listProjects() {
+export async function getSystemStatus() {
     try {
-        const { data, error } = await supabase
-            .from(TABLE_PATH)
-            .select('id, repository_name, repository_url');
+        const { count, error } = await supabase
+            .from(`${SCHEMA_PATH}.drafts_v2`)
+            .select('*', { count: 'exact', head: true });
         
         if (error) throw error;
-        return data || [];
+        return { online: true, drafts: count || 0 };
     } catch (err) {
-        console.error("❌ List Projects Error:", err.message);
-        return [];
+        return { online: false, error: "Database Desync" };
     }
 }

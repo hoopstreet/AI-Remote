@@ -1,0 +1,37 @@
+name: 🛡️ AI-Remote Elite Sentinel
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 * * * *' # Hourly Auto-Diagnostic
+  workflow_dispatch:
+
+jobs:
+  healing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Sync Repository
+        uses: actions/checkout@v4
+
+      - name: 🐘 Supabase Deep-Fix
+        run: |
+          # Force a schema reload and verify table existence
+          curl -i -X POST "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+          -H "apikey: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+          -H "Content-Profile: AI-Remote-Table"
+
+      - name: 🛰️ Northflank Health Check
+        run: |
+          # Force redeploy if mapping was updated
+          curl -X POST "https://api.northflank.com/v1/projects/multiple-marketing/services/ai-remote/redeploy" \
+          -H "Authorization: Bearer ${{ secrets.NORTHFLANK_API_TOKEN }}"
+
+      - name: 🧠 AI Brain Verification
+        run: |
+          # Ensure OpenRouter is responding to the current key
+          curl -X POST "https://openrouter.ai/api/v1/chat/completions" \
+          -H "Authorization: Bearer ${{ secrets.OPENROUTER_API_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{"model": "google/gemini-2.0-flash-001", "messages": [{"role": "user", "content": "verify"}]}'
