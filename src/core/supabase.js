@@ -1,25 +1,16 @@
 import { createClient } from '@supabase/supabase-js';
-import fetch, { Headers, Request, Response } from 'node-fetch';
-import ws from 'ws';
 
-// Polyfill Fetch for iSH/Node 16
-if (!globalThis.fetch) {
-    globalThis.fetch = fetch;
-    globalThis.Headers = Headers;
-    globalThis.Request = Request;
-    globalThis.Response = Response;
-}
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-const url = process.env.SUPABASE_URL;
-const key = process.env.SUPABASE_ANON_KEY;
-
-if (!url || !key) {
+if (!supabaseUrl || !supabaseKey) {
+    console.error("❌ URL:", supabaseUrl ? "DETECTED" : "MISSING");
+    console.error("❌ KEY:", supabaseKey ? "DETECTED" : "MISSING");
     throw new Error("CRITICAL: Supabase environment variables are missing!");
 }
 
-// Initialize client with 'ws' transport to fix the WebSocket error
-export const supabase = createClient(url, key, {
-  realtime: {
-    transport: ws,
-  },
+export const supabase = createClient(supabaseUrl, supabaseKey, {
+  db: { schema: 'AI-Remote-Table' }
 });
+
+console.log("✅ Supabase Memory Linked: AI-Remote-Table");
