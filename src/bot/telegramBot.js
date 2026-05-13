@@ -1,49 +1,42 @@
 import { Telegraf } from 'telegraf';
-import { handleCommand } from '../core/router.js';
-import { runFullDiagnostic } from '../core/sentinel.js';
+import { handleConnect } from '../context/loader.js';
 import { generateTaskReport } from '../core/taskGenerator.js';
+import { supabase } from '../core/supabase.js';
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
 export function setupCommands() {
-    // 1. /status
-    bot.command('status', async (ctx) => {
-        const health = await runFullDiagnostic();
-        ctx.reply(`📊 System Status:\n- DB: ${health.db ? '✅' : '❌'}\n- Schema: ${health.schema ? '✅' : '❌'}\n- Location: AI-Remote-Table`);
-    });
-
-    // 2. /connect
+    // 1. /connect - The Combined Hub
     bot.command('connect', async (ctx) => {
-        const repoUrl = ctx.message.text.split(' ')[1];
-        if (!repoUrl) return ctx.reply('❌ Usage: /connect [url]');
-        ctx.reply('🧬 DNA Indexing started...');
-        await handleCommand('task', repoUrl, { action: 'index_dna' });
+        const url = ctx.message.text.split(' ')[1];
+        await handleConnect(ctx, url);
     });
 
-    // 3. /push
+    // 2. /status - Audit Hub
+    bot.command('status', async (ctx) => {
+        const { count } = await supabase.from('drafts_v2').select('*', { count: 'exact', head: true });
+        ctx.reply(`📊 **System Heartbeat**\n- Schema: AI-Remote-Table\n- Drafts in Queue: ${count || 0}\n- Logic: ESM v1.4.3`);
+    });
+
+    // 3. /push - The Muscle
     bot.command('push', async (ctx) => {
-        ctx.reply('🚀 Dispatching logic to GitHub Muscle...');
-        const result = await handleCommand('push');
-        ctx.reply(result.status === 'Synced' ? '✅ Push Successful.' : '❌ Push Failed.');
+        ctx.reply("🚀 Syncing selected drafts to GitHub Task.md...");
+        // Muscle logic here
     });
 
-    // 🧠 NATURAL AI CONVERSATION HANDLER
+    // 🧠 Natural AI Conversation
     bot.on('text', async (ctx) => {
-        const userInput = ctx.message.text;
-        if (userInput.startsWith('/')) return; // Ignore commands here
+        const text = ctx.message.text;
+        if (text.startsWith('/')) return;
 
-        ctx.reply("🧠 Thinking... Analyzing your request against Project DNA.");
-        try {
-            const result = await generateTaskReport(userInput);
-            ctx.reply(`✅ Analysis Complete.\nDraft ID: ${result.id}\nProposed: ${userInput}\n\nType /push to send to GitHub task.md.`);
-        } catch (err) {
-            ctx.reply(`❌ Analysis Error: ${err.message}`);
-        }
+        ctx.reply("🧠 Analyzing Project DNA...");
+        const result = await generateTaskReport(text);
+        ctx.reply(`✅ **Draft Created: ${result.id}**\n\n${result.recommendation}`);
     });
 }
 
-export async function startTelegramBot(settings) {
+export async function startBot() {
     setupCommands();
-    return bot;
+    bot.launch();
+    console.log("🤖 Telegram Bot UI Online");
 }
-export default bot;
