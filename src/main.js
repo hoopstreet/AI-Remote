@@ -4,24 +4,26 @@ import { launch } from './core/bot.js';
 async function start() {
     console.log("🚀 [SYSTEM] Initializing 24/7 Autonomous Mode...");
     
-    // Run the health check
+    // Run the health check (Elite 11 Schema Check)
     const status = await runFullDiagnostic();
     
     if (status.db && status.schema) {
         console.log("✅ [SYSTEM] All connections mapped. Launching Bot...");
         
         try {
+            // This calls core/bot.js which calls bot/telegramBot.js
             const botInstance = await launch();
             
             if (botInstance) {
                 console.log("🛰️ [BOT] System settings loaded. Bot is now ONLINE.");
                 
-                // CRITICAL: Keep the process alive
-                // If your bot uses Telegraf, it needs to stay running:
-                if (botInstance.launch) {
-                    await botInstance.launch();
-                    console.log("✅ [TELEGRAM] Polling started. Listening for messages...");
-                }
+                // CRITICAL: This is the instruction that keeps the process alive
+                await botInstance.launch();
+                console.log("✅ [TELEGRAM] Polling started. Listening for messages...");
+                
+                // Enable graceful stop
+                process.once('SIGINT', () => botInstance.stop('SIGINT'));
+                process.once('SIGTERM', () => botInstance.stop('SIGTERM'));
             } else {
                 console.error("❌ [SYSTEM] Bot launch failed: No instance returned.");
                 process.exit(1);
