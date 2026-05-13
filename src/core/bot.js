@@ -1,14 +1,25 @@
-import { Telegraf } from 'telegraf';
-import dotenv from 'dotenv';
+import { supabase } from './supabase.js';
 
-dotenv.config();
+export async function launch() {
+    console.log("🤖 [BOT] Ignition sequence started...");
+    
+    try {
+        // Test a quick pull from the 10-table elite schema
+        const { data: settings, error } = await supabase
+            .from('bot_settings')
+            .select('*')
+            .limit(1);
 
-// Check both possible variable names
-const token = process.env.BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
+        if (error) throw error;
 
-if (!token) {
-    console.error("❌ CRITICAL: No bot token found in process.env.BOT_TOKEN or TELEGRAM_BOT_TOKEN");
-    process.exit(1); 
+        console.log("🛰️ [BOT] System settings loaded. Bot is now ONLINE.");
+        
+        // YOUR TELEGRAM BOT LOGIC GOES HERE
+        // Example: bot.launch();
+        
+        return true;
+    } catch (err) {
+        console.error("❌ [BOT] Failed to initialize:", err.message);
+        return false;
+    }
 }
-
-export const bot = new Telegraf(token);

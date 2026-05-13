@@ -1,32 +1,20 @@
 import { runFullDiagnostic } from './core/sentinel.js';
-import * as BotModule from './core/bot.js'; 
+import { launch } from './core/bot.js';
 
-async function init() {
+async function start() {
     console.log("🚀 [SYSTEM] Initializing 24/7 Autonomous Mode...");
     
-    const health = await runFullDiagnostic();
+    const status = await runFullDiagnostic();
     
-    if (health.db && health.schema) {
+    if (status.db && status.schema) {
         console.log("✅ [SYSTEM] All connections mapped. Launching Bot...");
-        
-        // This checks for common export names: startBot, launch, or the default export
-        const launcher = BotModule.startBot || BotModule.default || Object.values(BotModule)[0];
-        
-        if (typeof launcher === 'function') {
-            launcher();
-        } else {
-            console.error("❌ [SYSTEM] Could not find a launch function in bot.js");
+        const botStarted = await launch();
+        if (!botStarted) {
+            console.error("❌ [SYSTEM] Bot launch failed during execution.");
         }
     } else {
-        console.error("⚠️ [SYSTEM] Mapping failed. Retrying in 30 seconds...");
-        setTimeout(init, 30000);
+        console.error("🛡️ [SENTINEL] Diagnostic failed. System halted.");
     }
 }
 
-// Background Heartbeat
-setInterval(async () => {
-    console.log("🛡️ [SENTINEL] Running scheduled 24/7 diagnostic...");
-    await runFullDiagnostic();
-}, 3600000);
-
-init();
+start();
