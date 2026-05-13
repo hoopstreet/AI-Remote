@@ -1,0 +1,23 @@
+name: 🛡️ AI-Remote Elite Fleet
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 * * * *' # Hourly heartbeat
+
+jobs:
+  autonomous-operation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Dependencies
+        run: npm install
+      - name: 🚀 Run Elite Fleet (Sentinel + Bot)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: node src/main.js
