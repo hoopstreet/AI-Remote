@@ -2,10 +2,9 @@ import { supabase } from '../core/supabase.js';
 
 export async function connectProject(repoName, url) {
     try {
-        // We call the table without the schema prefix because 
-        // the client is already initialized to that schema
+        // We bypass the client-side schema setting and use the absolute path
         const { error } = await supabase
-            .from('projects')
+            .from('"AI-Remote-Table".projects')
             .upsert([
                 { 
                     repository_name: repoName, 
@@ -24,7 +23,7 @@ export async function connectProject(repoName, url) {
 export async function listProjects() {
     try {
         const { data, error } = await supabase
-            .from('projects')
+            .from('"AI-Remote-Table".projects')
             .select('id, repository_name, repository_url');
         
         if (error) throw error;
