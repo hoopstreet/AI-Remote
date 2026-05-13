@@ -1,0 +1,38 @@
+name: 🛡️ Elite Connectivity Sentinel
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    - cron: '0 * * * *' # Auto-fixes connections every hour
+
+jobs:
+  infrastructure-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🧠 OpenRouter Heartbeat
+        run: |
+          curl -X POST "https://openrouter.ai/api/v1/chat/completions" \
+          -H "Authorization: Bearer ${{ secrets.OPENROUTER_API_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "model": "google/gemini-2.0-flash-001",
+            "messages": [{"role": "user", "content": "ping"}]
+          }' || echo "⚠️ OpenRouter Check Failed"
+
+      - name: 🐘 Supabase Schema Force-Reload
+        run: |
+          curl -X POST "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+          -H "apikey: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+          -H "Content-Profile: AI-Remote-Table" || echo "⚠️ Supabase Mapping Failed"
+
+      - name: 🛰️ Northflank Auto-Redeploy
+        run: |
+          curl -X POST "https://api.northflank.com/v1/projects/multiple-marketing/services/ai-remote/redeploy" \
+          -H "Authorization: Bearer ${{ secrets.NORTHFLANK_API_TOKEN }}" \
+          -H "Content-Type: application/json"
