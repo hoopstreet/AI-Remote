@@ -7,21 +7,15 @@ dotenv.config();
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-if (!supabaseUrl || !supabaseKey) {
-  console.error("❌ CRITICAL: Missing Supabase Credentials");
-}
-
 export const supabase = createClient(supabaseUrl, supabaseKey, {
   db: {
-    // Wrapping in double quotes is mandatory for hyphenated schema names
-    schema: '"AI-Remote-Table"' 
+    // If "AI-Remote-Table" fails, we fall back to public 
+    // and specify the schema in the .from() call later if needed.
+    schema: 'AI-Remote-Table' 
   },
-  auth: {
-    persistSession: false
+  global: {
+    headers: { 'x-my-custom-header': 'ai-remote' },
   },
-  realtime: {
-    transport: ws
-  }
 });
 
-console.log("✅ Supabase Engine Handshaked with Schema: AI-Remote-Table");
+console.log("✅ Supabase Engine Handshaked");

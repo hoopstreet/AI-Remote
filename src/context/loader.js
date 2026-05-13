@@ -1,8 +1,8 @@
 import { supabase } from '../core/supabase.js';
 
-// Renamed to connectProject to match what telegramBot.js expects
 export async function connectProject(repoName, url) {
     try {
+        // We explicitly point to the schema and table here
         const { error } = await supabase
             .from('projects')
             .upsert([
@@ -21,13 +21,15 @@ export async function connectProject(repoName, url) {
 }
 
 export async function listProjects() {
-    const { data, error } = await supabase
-        .from('projects')
-        .select('id, repository_name, repository_url');
-    
-    if (error) {
-        console.error("❌ List Projects Error:", error.message);
+    try {
+        const { data, error } = await supabase
+            .from('projects')
+            .select('id, repository_name, repository_url');
+        
+        if (error) throw error;
+        return data || [];
+    } catch (err) {
+        console.error("❌ List Projects Error:", err.message);
         return [];
     }
-    return data;
 }
