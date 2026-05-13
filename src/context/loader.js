@@ -2,7 +2,7 @@ import { supabase } from '../core/supabase.js';
 
 export async function connectProject(repoName, url) {
     try {
-        // We bypass the client-side schema setting and use the absolute path
+        // Absolute pathing with double quotes for hyphenated schema compliance
         const { error } = await supabase
             .from('"AI-Remote-Table".projects')
             .upsert([
