@@ -9,13 +9,16 @@ const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseKey, {
   db: {
-    // If "AI-Remote-Table" fails, we fall back to public 
-    // and specify the schema in the .from() call later if needed.
     schema: 'AI-Remote-Table' 
   },
   global: {
-    headers: { 'x-my-custom-header': 'ai-remote' },
+    // This is the CRITICAL fix for Node 20
+    fetch: (...args) => fetch(...args),
   },
+  realtime: {
+    // Explicitly passing the WebSocket constructor
+    transport: ws 
+  }
 });
 
-console.log("✅ Supabase Engine Handshaked");
+console.log("✅ Supabase Engine Handshaked with Schema: AI-Remote-Table");
