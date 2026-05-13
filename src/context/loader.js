@@ -1,10 +1,12 @@
 import { supabase } from '../core/supabase.js';
 
+// We hard-quote the schema to prevent Postgres from misinterpreting hyphens
+const TABLE_PATH = '"AI-Remote-Table".projects';
+
 export async function connectProject(repoName, url) {
     try {
-        // Absolute pathing with double quotes for hyphenated schema compliance
         const { error } = await supabase
-            .from('"AI-Remote-Table".projects')
+            .from(TABLE_PATH)
             .upsert([
                 { 
                     repository_name: repoName, 
@@ -23,7 +25,7 @@ export async function connectProject(repoName, url) {
 export async function listProjects() {
     try {
         const { data, error } = await supabase
-            .from('"AI-Remote-Table".projects')
+            .from(TABLE_PATH)
             .select('id, repository_name, repository_url');
         
         if (error) throw error;
