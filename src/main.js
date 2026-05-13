@@ -1,25 +1,23 @@
-import { startBot } from './bot/telegramBot.js';
-import dotenv from 'dotenv';
+import { bot } from './core/bot.js';
+import { setupCommands } from './bot/telegramBot.js';
 
-dotenv.config();
+async function startBot() {
+    try {
+        console.log("🛰️ Initializing CTO Elite Commands...");
+        
+        // This is the missing link!
+        setupCommands();
 
-const isGitHub = process.env.GITHUB_ACTIONS === 'true';
+        console.log("🚀 Bot is now Polling...");
+        await bot.launch();
 
-console.log("------------------------------------------");
-console.log("🚀 Sovereign CTO Bot v1.4.1 Ignition...");
-console.log(`📡 Environment: ${isGitHub ? 'GitHub Runner (Task)' : 'Cloud Server (Service)'}`);
-console.log("------------------------------------------");
-
-if (isGitHub) {
-  console.log("✅ CI/CD Build Check: Dependencies and Connections Verified.");
-  console.log("🛑 GitHub Action complete. (Avoiding 409 Conflict with Production)");
-  process.exit(0); 
-} else {
-  try {
-    startBot();
-    console.log("🚀 CTO Elite Bot Wired and Polling in Production...");
-  } catch (err) {
-    console.error("❌ Production Crash:", err);
-    process.exit(1);
-  }
+    } catch (error) {
+        console.error("❌ Startup Error:", error.message);
+    }
 }
+
+// Global Handlers
+process.once('SIGINT', () => bot.stop('SIGINT'));
+process.once('SIGTERM', () => bot.stop('SIGTERM'));
+
+startBot();
