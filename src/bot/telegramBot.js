@@ -1,42 +1,30 @@
 import { Telegraf } from 'telegraf';
-import { handleConnect } from '../context/loader.js';
-import { generateTaskReport } from '../core/taskGenerator.js';
 import { supabase } from '../core/supabase.js';
+import { orchestrateTask } from '../ai/agents.js';
+import { connectProject } from '../context/loader.js';
+import { pushDraft } from '../drafts/draftManager.js';
+import { getStatus } from './intelligence.js';
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
-export function setupCommands() {
-    // 1. /connect - The Combined Hub
-    bot.command('connect', async (ctx) => {
-        const url = ctx.message.text.split(' ')[1];
-        await handleConnect(ctx, url);
+export function setupCommands(bot) {
+    // 1. PLANNING: /task & Custom Prompt
+    bot.command('task', orchestrateTask);
+    bot.on('text', async (ctx, next) => {
+        if (ctx.message.text.startsWith('/')) return next();
+        await orchestrateTask(ctx);
     });
 
-    // 2. /status - Audit Hub
-    bot.command('status', async (ctx) => {
-        const { count } = await supabase.from('drafts_v2').select('*', { count: 'exact', head: true });
-        ctx.reply(`📊 **System Heartbeat**\n- Schema: AI-Remote-Table\n- Drafts in Queue: ${count || 0}\n- Logic: ESM v1.4.3`);
-    });
+    // 2. EXECUTION: /push (Single/Bulk/Bundle)
+    bot.command('push', pushDraft);
 
-    // 3. /push - The Muscle
-    bot.command('push', async (ctx) => {
-        ctx.reply("🚀 Syncing selected drafts to GitHub Task.md...");
-        // Muscle logic here
-    });
+    // 3. AUDIT: /status (Including Draft counts)
+    bot.command('status', getStatus);
 
-    // 🧠 Natural AI Conversation
-    bot.on('text', async (ctx) => {
-        const text = ctx.message.text;
-        if (text.startsWith('/')) return;
-
-        ctx.reply("🧠 Analyzing Project DNA...");
-        const result = await generateTaskReport(text);
-        ctx.reply(`✅ **Draft Created: ${result.id}**\n\n${result.recommendation}`);
-    });
+    // 4. PROJECT: /connect (List + New Repo)
+    bot.command('connect', connectProject);
 }
 
-export async function startBot() {
-    setupCommands();
-    bot.launch();
-    console.log("🤖 Telegram Bot UI Online");
-}
+setupCommands(bot);
+bot.launch();
+console.log("🛰️ [BOT] Elite v1.0.4 Online");

@@ -1,34 +1,16 @@
 import { supabase } from '../core/supabase.js';
 
-export async function orchestrateTask(ctx, customPrompt = null) {
-    const text = customPrompt || ctx.message.text.replace(/^\/task\s*/i, '');
-    const draftId = `DRAFT-${Math.floor(1000 + Math.random() * 9000)}`;
+export async function orchestrateTask(ctx) {
+    const prompt = ctx.message.text.replace('/task', '').trim();
+    if (!prompt) return ctx.reply("💡 Describe what you want to build (e.g., 'Add a logout button')");
 
-    // AI Logic: Save to Supabase Draft Queue
-    const { error } = await supabase
-        .from('drafts_v2')
-        .insert([{ 
-            id: draftId, 
-            content: text, 
-            status: 'pending_review',
-            risk_score: Math.floor(Math.random() * 10) // Mock Reviewer Agent
-        }]);
+    ctx.reply("🧠 Agents are debating the architecture...");
+    
+    // Simulate AI generation & Risk Audit
+    const draftId = Math.floor(1000 + Math.random() * 9000);
+    const { error } = await supabase.from('drafts_v2').insert({ id: draftId, title: prompt, status: 'pending' });
 
-    if (error) return ctx.reply(`❌ DB Error: ${error.message}`);
+    if (error) return ctx.reply("❌ Memory Error: Could not save draft.");
 
-    const response = `📂 **CTO ANALYSIS REPORT**
----
-🧬 DNA Context: Found
-🛠 Task: "${text.substring(0, 40)}..."
-⚖️ Verdict: **APPROVED** (Risk: Low)
-
-📝 **ID: ${draftId}**
-Logged to queue.
-
-💡 **Recommendations:**
-1. Send \`/push ${draftId}\` to execute.
-2. Reply "Regenerate" to refine logic.
-3. Use "Bundle" to merge with other tasks.`;
-
-    ctx.reply(response, { parse_mode: 'Markdown' });
+    ctx.reply(`✅ **Draft Generated (ID: ${draftId})**\nRequirement: "${prompt}"\nRisk Score: Low\n\n**Recommendations:**\n1. Generate unit tests\n2. Bundle with existing UI tasks\n3. Push to GitHub\n\n*Reply 'generate 1' or 'push ${draftId}'*`);
 }
